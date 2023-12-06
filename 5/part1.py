@@ -46,7 +46,6 @@ def mapt(function: Callable, *sequences) -> tuple:
 def mapl(function: Callable, *sequences) -> list:
     return list(map(function, *sequences))
 
-
 def ints(text: str) -> Tuple[int]:
     """A tuple of all the integers in text, ignoring non-number characters."""
     return mapt(int, re.findall(r'-?[0-9]+', text))
@@ -56,8 +55,25 @@ txt = Path('./input.txt').read_text()
 seeds, *nums = paragraphs(txt)
 seeds = ints(seeds)
 
+
+
+
 nums = mapl(lines, nums)
 nums = mapl(lambda l: l[1:], nums)
 maps = mapl(lambda x: mapl(ints, x), nums)
 
+ends_pos = []
+for seed in seeds:
+    step = seed
+    b = False
+    for map in maps:
+        for interval in map:
+            end, start, range = interval
+            if step <= start + range and step >= start and not b:
+                step = (step - start) + end
+                b = True
+        b = False
+    ends_pos.append(step)
+
+print(min(ends_pos))
 # mapt(ints,nums.split('\n'))
