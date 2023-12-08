@@ -69,10 +69,9 @@ for seed in seeds:
     for map in maps:
         for interval in map:
             end, start, range = interval
-            if step <= start + range and step >= start and not b:
+            if step <= start + range and step >= start:
                 step = (step - start) + end
-                b = True
-        b = False
+                break
     ends_pos.append(step)
 
 print(min(ends_pos))
